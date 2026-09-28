@@ -5,6 +5,8 @@ package models;
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 
+option (gogoproto.goproto_enum_prefix_all) = true;
+
 message CheckDefinition {
   repeated Check checks = 1;
   string log_source = 2 [(gogoproto.jsontag) = "log_source"];
@@ -26,8 +28,14 @@ message TCPCheck {
 }
 
 message HTTPCheck {
+  enum HTTPVersion {
+    HTTP1 = 0;
+    HTTP2 = 1;
+  }
+
   uint32 port = 1 [(gogoproto.jsontag) = "port"];
   uint64 request_timeout_ms = 2;
   string path = 3 [(gogoproto.jsontag) = "path"];
   uint64 interval_ms = 4;
+  HTTPVersion http_version = 5 [(gogoproto.jsontag) = "http_version"];
 }

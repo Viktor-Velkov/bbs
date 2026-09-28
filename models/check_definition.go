@@ -51,5 +51,14 @@ func (check Check) Validate() error {
 	} else if !(c.GetPort() > 0 && c.GetPort() <= 65535) {
 		validationError = validationError.Append(ErrInvalidField{"port"})
 	}
+
+	if httpCheck := check.GetHttpCheck(); httpCheck != nil {
+		switch httpCheck.GetHttpVersion() {
+		case HTTPCheck_HTTP1, HTTPCheck_HTTP2:
+		default:
+			validationError = validationError.Append(ErrInvalidField{"http_version"})
+		}
+	}
+
 	return validationError.ToError()
 }
